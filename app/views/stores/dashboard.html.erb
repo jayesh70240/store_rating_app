@@ -1,0 +1,48 @@
+<div class="container my-5 shadow-sm p-4 rounded bg-light">
+  <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+    <h1 class="h3 text-primary fw-bold">
+      Store Dashboard: <strong><%= @store.name %></strong>
+    </h1>
+    <div>
+      <%= button_to "Logout", logout_path, method: :delete, class: 'btn btn-danger m-2' %>
+      <%= button_to "Change Password", change_password_path, method: :get, class: 'btn btn-warning' %>
+    </div>
+  </div>
+
+  <div class="mb-4 text-center">
+    <p class="fs-4 fw-bold">
+      Average Rating: 
+      <span class="badge bg-success fs-5 p-2"><%= @average_rating.round(2) %></span>
+    </p>
+  </div>
+
+  <h3 class="mb-3 text-center fw-bold">Users Who Rated Your Store</h3>
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered text-center align-middle">
+      <thead class="table-primary">
+        <tr>
+          <th>User Name</th>
+          <th>User Email</th>
+          <th>Rating</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @ratings.any? %>
+          <% @ratings.each do |rating| %>
+            <tr>
+              <td><%= rating.user.name %></td>
+              <td><%= rating.user.email %></td>
+              <td>
+                <span class="badge bg-info text-dark"><%= rating.rating %></span>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="3" class="text-center text-muted">No users have rated your store yet.</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

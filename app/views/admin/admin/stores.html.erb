@@ -1,0 +1,52 @@
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">📍 All Stores</h2>
+    <%= link_to '➕ Add Store', admin_new_store_path, class: 'btn btn-success px-4 fw-bold' %>
+  </div>
+
+  <div class="card mb-4 shadow-sm border-0">
+    <div class="card-body bg-light">
+      <%= form_with url: admin_stores_path, method: :get, local: true, class: "row g-3 align-items-center" do %>
+        <div class="col-md-10">
+          <%= label_tag :query, "🔍 Search by Name, Email, or Address", class: "form-label fw-bold" %>
+          <%= text_field_tag :query, params[:query], placeholder: "Enter keyword", class: "form-control" %>
+        </div>
+        <div class="col-md-2 d-grid">
+          <%= submit_tag "Search", class: 'btn btn-primary fw-bold' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <% @stores.each do |store| %>
+      <div class="col">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body">
+            <h5 class="card-title fw-bold text-primary"><%= store.name %></h5>
+            <p class="card-text text-muted">
+              📍 <strong>Address:</strong> <%= store.address %>
+            </p>
+            <p class="card-text text-muted">
+              📧 <strong>Email:</strong> <%= store.user&.email || 'N/A' %>
+            </p>
+            <p class="card-text">
+              ⭐ <strong>Rating:</strong>
+              <span class="badge bg-success">
+                <%= store.ratings.average(:rating)&.round(1) || 0 %>
+              </span>
+            </p>
+          </div>
+          <div class="card-footer bg-white border-0 text-end">
+            <%= link_to 'View Details', admin_stores_path(store), class: 'btn btn-outline-primary btn-sm' %> 
+            <%#temporary button for showoff%>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mt-4 d-flex justify-content-center">
+    <%= paginate @stores %>
+  </div>
+</div>

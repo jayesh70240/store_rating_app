@@ -1,0 +1,54 @@
+<h2 class="text-center my-4">
+  <span class="text-primary">User</span> Dashboard
+</h2>
+
+<p class="text-center mb-4">Welcome, <strong><%= current_user.name %>!</strong></p>
+<div class="d-flex justify-content-end mx-5">
+  <%= button_to "Change Password", change_password_path, method: :get, class: "btn btn-info m-2" %>
+  <%= button_to "Logout", logout_path, method: :delete, class: "btn btn-danger m-2" %>
+</div>
+
+
+<div class="container">
+  <%= form_with url: user_dashboard_path, method: :get, local: true do %>
+    <div class="input-group mb-4">
+      <%= label_tag :search, "Search by Name or Address:", class: 'input-group-text' %>
+      <%= text_field_tag :search, params[:search], placeholder: "Enter name or address", class: 'form-control' %>
+      <%= submit_tag "Search", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+
+  <h3 class="my-4 text-info">Stores</h3>
+
+  <table class="table table-striped table-bordered">
+    <thead class="thead-dark">
+      <tr>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Overall Rating</th>
+        <th>My Submitted Rating</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @stores.each do |store| %>
+        <tr>
+          <td><%= store.name %></td>
+          <td><%= store.address %></td>
+          <td><%= store.ratings.average(:rating).to_f.round(2) %></td>
+          <td>
+            <% user_rating = store.ratings.find_by(user_id: current_user.id) %>
+            <%= user_rating ? user_rating.rating : 'Not Rated' %>
+          </td>
+          <td>
+            <% if user_rating %>
+              <%= link_to 'Modify Rating', store_path(store), class: 'btn btn-warning btn-sm' %>
+            <% else %>
+              <%= link_to 'Submit Rating', store_path(store), class: 'btn btn-primary btn-sm' %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

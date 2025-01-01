@@ -1,0 +1,35 @@
+<div class="container mt-5">
+  <div class="text-center mb-4">
+    <h1 class="display-4 text-primary"><%= @store.name %></h1>
+    <p class="lead text-muted"><%= @store.address %></p>
+  </div>
+
+  <div class="text-center mb-4">
+    <h4 class="fw-bold">Overall Rating:</h4>
+    <p class="h5 text-success">
+      <%= @store.ratings.average(:rating).to_f.round(2) || 'No Ratings Yet' %>
+    </p>
+  </div>
+
+  <div class="card shadow-sm border-0">
+    <div class="card-body">
+      <h3 class="fw-bold mb-3 text-center">
+        <%= @user_rating ? 'Modify Your Rating:' : 'Submit Your Rating:' %>
+      </h3>
+      
+      <%= form_with(model: [@store, Rating.new], url: submit_rating_store_path(@store), local: true) do |form| %>
+        <div class="mb-3">
+          <%= form.label :rating, 'Your Rating (1-5):', class: 'form-label fw-semibold' %>
+          <%= form.number_field :rating, in: 1..5, value: @user_rating&.rating, class: 'form-control' %>
+        </div>
+        <div class="mb-3 text-center">
+          <%= form.submit 'Submit', class: 'btn btn-primary px-4 py-2' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="mt-4 text-center">
+    <%= link_to '← Back to Stores', user_dashboard_path, class: 'btn btn-secondary px-4' %>
+  </div>
+</div>

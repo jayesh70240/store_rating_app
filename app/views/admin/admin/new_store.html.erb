@@ -1,0 +1,32 @@
+<h1 class="text-center my-4">New Store</h1>
+
+<div class="container">
+  <%= form_with model: @store, url: admin_stores_path, local: true do |form| %>
+    <div class="card shadow-sm">
+      <div class="card-header bg-primary text-white">
+        <h4>Add Store</h4>
+      </div>
+
+      <div class="card-body">
+        <div class="form-group">
+          <%= form.label :name, 'Store Name', class: 'form-label' %>
+          <%= form.text_field :name, class: 'form-control', placeholder: 'Enter Store Name' %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :address, 'Address', class: 'form-label' %>
+          <%= form.text_field :address, class: 'form-control', placeholder: 'Enter Store Address' %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :user_id, 'Store Owner', class: 'form-label' %>
+          <%= form.collection_select :user_id, User.where(role:'store_owner'), :id, :email, { prompt: "Select Store Owner" }, class: 'form-control' %>
+        </div>
+      </div>
+
+      <div class="card-footer text-center">
+        <%= form.submit 'Submit', class: 'btn btn-success btn-lg' %>
+      </div>
+    </div>
+  <% end %>
+</div>
